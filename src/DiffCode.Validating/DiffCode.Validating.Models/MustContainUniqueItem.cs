@@ -7,11 +7,11 @@ using FluentValidation;
 namespace DiffCode.Validating.Models;
 
 /// <summary>
-/// Правило валидации для списка, который должен состоять из указанных элементов, перечисленных в том же порядке.
+/// Правило валидации для списка, который должен содержать установленное значение, уникальное в пределах этого списка.
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="V"></typeparam>
-public record MustContainExactItems<T, V> : BaseManyMany<T, V> where T : IValidatable<T>
+public record MustContainUniqueItem<T, V> : BaseManyOne<T, V> where T : IValidatable<T>
 {
   /// <summary>
   /// <inheritdoc />
@@ -19,7 +19,7 @@ public record MustContainExactItems<T, V> : BaseManyMany<T, V> where T : IValida
   /// <param name="elemExpr"></param>
   /// <param name="elemValExpr"></param>
   /// <param name="valExpr"></param>
-  public MustContainExactItems(Func<T> elemExpr, Func<T, IEnumerable<V>> elemValExpr, Func<IEnumerable<V>> valExpr) : base(elemExpr, elemValExpr, valExpr)
+  public MustContainUniqueItem(Func<T> elemExpr, Func<T, IEnumerable<V>> elemValExpr, Func<V> valExpr) : base(elemExpr, elemValExpr, valExpr)
   {
 
   }
@@ -36,12 +36,12 @@ public record MustContainExactItems<T, V> : BaseManyMany<T, V> where T : IValida
   /// <summary>
   /// <inheritdoc />
   /// </summary>
-  public override Func<IEnumerable<V>, IEnumerable<V>, bool> Fn => (this as IFuncsManyMany).ManyEqualsOther<V>();
+  public override Func<IEnumerable<V>, V, bool> Fn => (this as IFuncsManyOne).UniqueOneInMany<V>();
 
   /// <summary>
   /// <inheritdoc />
   /// </summary>
   public override Func<T, ValidationContext<T>, string> ErrorMsg => (p, ctx)
-    => $"Список значений элемента {Element} ({CurrValues.AsString()}) должен соответствовать указанному списку - {Values.AsString()}.";
+    => $"Элемент {Value} должен быть уникальным (встречаться ровно один раз) в пределах списка значений элемента {Element} ({CurrValues.AsString()}).";
 
 }

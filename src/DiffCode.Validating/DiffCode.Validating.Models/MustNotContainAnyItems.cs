@@ -7,11 +7,12 @@ using FluentValidation;
 namespace DiffCode.Validating.Models;
 
 /// <summary>
-/// Правило валидации для списка, который должен состоять из указанных элементов, перечисленных в том же порядке.
+/// Правило валидации для списка, который не должен содержать ни одного из 
+/// элементов из заданного списка.
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="V"></typeparam>
-public record MustContainExactItems<T, V> : BaseManyMany<T, V> where T : IValidatable<T>
+public record MustNotContainAnyItems<T, V> : BaseManyMany<T, V> where T : IValidatable<T>
 {
   /// <summary>
   /// <inheritdoc />
@@ -19,7 +20,7 @@ public record MustContainExactItems<T, V> : BaseManyMany<T, V> where T : IValida
   /// <param name="elemExpr"></param>
   /// <param name="elemValExpr"></param>
   /// <param name="valExpr"></param>
-  public MustContainExactItems(Func<T> elemExpr, Func<T, IEnumerable<V>> elemValExpr, Func<IEnumerable<V>> valExpr) : base(elemExpr, elemValExpr, valExpr)
+  public MustNotContainAnyItems(Func<T> elemExpr, Func<T, IEnumerable<V>> elemValExpr, Func<IEnumerable<V>> valExpr) : base(elemExpr, elemValExpr, valExpr)
   {
 
   }
@@ -36,12 +37,12 @@ public record MustContainExactItems<T, V> : BaseManyMany<T, V> where T : IValida
   /// <summary>
   /// <inheritdoc />
   /// </summary>
-  public override Func<IEnumerable<V>, IEnumerable<V>, bool> Fn => (this as IFuncsManyMany).ManyEqualsOther<V>();
+  public override Func<IEnumerable<V>, IEnumerable<V>, bool> Fn => (this as IFuncsManyMany).ManyNotIncludesAny<V>();
 
   /// <summary>
   /// <inheritdoc />
   /// </summary>
   public override Func<T, ValidationContext<T>, string> ErrorMsg => (p, ctx)
-    => $"Список значений элемента {Element} ({CurrValues.AsString()}) должен соответствовать указанному списку - {Values.AsString()}.";
+    => $"Список значений элемента {Element} ({CurrValues.AsString()}) не должен содержать ни одного значения из установленного списка - {Values.AsString()}.";
 
 }

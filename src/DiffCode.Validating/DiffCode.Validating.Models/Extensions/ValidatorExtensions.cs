@@ -111,6 +111,48 @@ public static class ValidatorExtensions
 
 
   /// <summary>
+  /// Добавляет к валидатору новое правило валидации типа <see cref="Models.MustBeNotInRange{T, V}"/>.
+  /// </summary>
+  /// <typeparam name="T"></typeparam>
+  /// <typeparam name="V"></typeparam>
+  /// <param name="validator">Валидатор.</param>
+  /// <param name="elem">Валидируемый объект.</param>
+  /// <param name="expr1">Валидируемое значение.</param>
+  /// <param name="expr2">Целевой/заданный интервал.</param>
+  /// <returns></returns>
+  public static BaseElementValidator<T> MustBeNotInRange<T, V>(this BaseElementValidator<T> validator, T elem, V expr1, (V, V) expr2) where T : IValidatable<T> where V : struct, INumber<V>
+    => validator.FluentAction(() => validator.AddTCases(new MustBeNotInRange<T, V>(() => elem, p => expr1, () => expr2)));
+
+
+  /// <summary>
+  /// Добавляет к валидатору новое правило валидации типа <see cref="Models.MustContainAllItems{T, V}"/>.
+  /// </summary>
+  /// <typeparam name="T"></typeparam>
+  /// <typeparam name="V"></typeparam>
+  /// <param name="validator">Валидатор.</param>
+  /// <param name="elem">Валидируемый объект.</param>
+  /// <param name="expr1">Валидируемый список значений.</param>
+  /// <param name="expr2">Целевой/заданный список.</param>
+  /// <returns></returns>
+  public static BaseElementValidator<T> MustContainAllItems<T, V>(this BaseElementValidator<T> validator, T elem, IEnumerable<V> expr1, IEnumerable<V> expr2) where T : IValidatable<T>
+    => validator.FluentAction(() => validator.AddTCases(new MustContainAllItems<T, V>(() => elem, p => expr1, () => expr2)));
+
+
+  /// <summary>
+  /// Добавляет к валидатору новое правило валидации типа <see cref="Models.MustContainAnyItems{T, V}"/>.
+  /// </summary>
+  /// <typeparam name="T"></typeparam>
+  /// <typeparam name="V"></typeparam>
+  /// <param name="validator">Валидатор.</param>
+  /// <param name="elem">Валидируемый объект.</param>
+  /// <param name="expr1">Валидируемый список значений.</param>
+  /// <param name="expr2">Целевой/заданный список.</param>
+  /// <returns></returns>
+  public static BaseElementValidator<T> MustContainAnyItems<T, V>(this BaseElementValidator<T> validator, T elem, IEnumerable<V> expr1, IEnumerable<V> expr2) where T : IValidatable<T>
+    => validator.FluentAction(() => validator.AddTCases(new MustContainAnyItems<T, V>(() => elem, p => expr1, () => expr2)));
+
+
+  /// <summary>
   /// Добавляет к валидатору новое правило валидации типа <see cref="Models.MustContainExactItems{T, V}"/>.
   /// </summary>
   /// <typeparam name="T"></typeparam>
@@ -153,6 +195,20 @@ public static class ValidatorExtensions
 
 
   /// <summary>
+  /// Добавляет к валидатору новое правило валидации типа <see cref="Models.MustContainUniqueItem{T, V}"/>.
+  /// </summary>
+  /// <typeparam name="T"></typeparam>
+  /// <typeparam name="V"></typeparam>
+  /// <param name="validator">Валидатор.</param>
+  /// <param name="elem">Валидируемый объект.</param>
+  /// <param name="expr1">Валидируемый список значений.</param>
+  /// <param name="expr2">Целевое/заданное значение.</param>
+  /// <returns></returns>
+  public static BaseElementValidator<T> MustContainUniqueItem<T, V>(this BaseElementValidator<T> validator, T elem, IEnumerable<V> expr1, V expr2) where T : IValidatable<T>
+    => validator.FluentAction(() => validator.AddTCases(new MustContainUniqueItem<T, V>(() => elem, p => expr1, () => expr2)));
+
+
+  /// <summary>
   /// Добавляет к валидатору новое правило валидации типа <see cref="Models.MustCountItems{T, V}"/>.
   /// </summary>
   /// <typeparam name="T"></typeparam>
@@ -177,6 +233,20 @@ public static class ValidatorExtensions
   /// <returns></returns>
   public static BaseElementValidator<T> MustMatchText<T>(this BaseElementValidator<T> validator, T elem, string expr1, string expr2) where T : IValidatable<T>
     => validator.FluentAction(() => validator.AddTCases(new MustMatchText<T>(() => elem, p => expr1, () => expr2)));
+
+
+  /// <summary>
+  /// Добавляет к валидатору новое правило валидации типа <see cref="Models.MustNotContainAnyItems{T, V}"/>.
+  /// </summary>
+  /// <typeparam name="T"></typeparam>
+  /// <typeparam name="V"></typeparam>
+  /// <param name="validator">Валидатор.</param>
+  /// <param name="elem">Валидируемый объект.</param>
+  /// <param name="expr1">Валидируемый список значений.</param>
+  /// <param name="expr2">Целевой/заданный список.</param>
+  /// <returns></returns>
+  public static BaseElementValidator<T> MustNotContainAnyItems<T, V>(this BaseElementValidator<T> validator, T elem, IEnumerable<V> expr1, IEnumerable<V> expr2) where T : IValidatable<T>
+    => validator.FluentAction(() => validator.AddTCases(new MustNotContainAnyItems<T, V>(() => elem, p => expr1, () => expr2)));
 
 
   /// <summary>
